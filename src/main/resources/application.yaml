@@ -1,0 +1,20 @@
+server:
+  port: 3000
+spring:
+  application:
+    name: playground
+  datasource:
+    db1:
+      url: jdbc:mysql://localhost:3307/generate_spr?useSSL=false&serverTimezone=UTC
+      username: root
+      password:
+      driverClassName: com.mysql.cj.jdbc.Driver
+    db2:
+      url: jdbc:mysql://localhost:3307/dummy?useSSL=false&serverTimezone=UTC
+      username: root
+      password:
+      driverClassName: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      show-sql: true
+      dialect: org.hibernate.dialect.SQLServerDialect
