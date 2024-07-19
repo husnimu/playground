@@ -1,16 +1,16 @@
 server:
-  port: 3000
+  port: 3002
 spring:
   application:
     name: playground
   datasource:
     db1:
-      url: jdbc:mysql://localhost:3307/generate_spr?useSSL=false&serverTimezone=UTC
+      url: jdbc:mysql://localhost:3307/dummy?useSSL=false&serverTimezone=UTC
       username: root
       password:
       driverClassName: com.mysql.cj.jdbc.Driver
     db2:
-      url: jdbc:mysql://localhost:3307/dummy?useSSL=false&serverTimezone=UTC
+      url: jdbc:mysql://localhost:3307/dummy1?useSSL=false&serverTimezone=UTC
       username: root
       password:
       driverClassName: com.mysql.cj.jdbc.Driver
@@ -18,3 +18,11 @@ spring:
     hibernate:
       show-sql: true
       dialect: org.hibernate.dialect.SQLServerDialect
+logging:
+  level:
+    org:
+      springframework:
+        jdbc:
+          core:
+            JdbcTemplate: DEBUG
+            StatementCreatorUtils: TRACE

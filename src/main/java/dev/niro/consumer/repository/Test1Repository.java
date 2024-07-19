@@ -22,9 +22,7 @@ public class Test1Repository {
   }
 
   public Optional<Test1> findById(Integer id) {
-    String sql = """
-              select * from test1 where id = ?
-            """;
+    String sql = "select * from test where id = ?";
     Test1 test1 = null;
     try {
       test1 = jdbcTemplateSatu.queryForObject(sql, new BeanPropertyRowMapper<>(Test1.class),
@@ -36,9 +34,7 @@ public class Test1Repository {
   }
 
   public  Test1 create(Test1 test1){
-    String sql = """
-              INSERT INTO test1 (name) VALUES (:name);
-            """;
+    String sql = "INSERT INTO test (name) VALUES (:name);";
     MapSqlParameterSource params = new MapSqlParameterSource();
     params.addValue("name", test1.getName());
     KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -48,6 +44,7 @@ public class Test1Repository {
 
     Number generatedId = keyHolder.getKey();
 
+    assert generatedId != null;
     test1.setId(generatedId.intValue());
     return test1;
   }

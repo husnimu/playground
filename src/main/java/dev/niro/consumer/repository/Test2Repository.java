@@ -1,6 +1,6 @@
 package dev.niro.consumer.repository;
 
-import dev.niro.consumer.model.Tes2 ;
+import dev.niro.consumer.model.Test1 ;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -14,42 +14,37 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public class Tes2Repository {
-  private JdbcTemplate jdbcTemplateSatu;
+public class Test2Repository {
+  private final JdbcTemplate jdbcTemplateDua;
 
-  public Tes2Repository(@Qualifier("jdbcTemplateSatu") JdbcTemplate jdbcTemplateSatu) {
-    this.jdbcTemplateSatu = jdbcTemplateSatu;
+  public Test2Repository(@Qualifier("jdbcTemplateDua") JdbcTemplate jdbcTemplateDua) {
+    this.jdbcTemplateDua = jdbcTemplateDua;
   }
 
-  public Optional<Tes2 > findById(Integer id) {
-    String sql = """
-              select * from tes2 where id = ?
-            """;
-    Tes2  tes2 = null;
+  public Optional<Test1> findById(Integer id) {
+    String sql = "select * from test where id = ?;";
+    Test1 test1 = null;
     try {
-      tes2 = jdbcTemplateSatu.queryForObject(sql, new BeanPropertyRowMapper<>(Tes2 .class),
+      test1 = jdbcTemplateDua.queryForObject(sql, new BeanPropertyRowMapper<>(Test1.class),
               id);
     } catch (DataAccessException ex) {
       System.out.println("data not found");
     }
-    return Optional.ofNullable(tes2);
+    return Optional.ofNullable(test1);
   }
 
-  public  Tes2  create(Tes2  tes2){
-    String sql = """
-              INSERT INTO tes2 (id_test1, name) VALUES (:idTest1, :name);
-            """;
+  public  Test1 create(Test1 test1){
+    String sql = "INSERT INTO test (name) VALUES (:name);";
     MapSqlParameterSource params = new MapSqlParameterSource();
-    params.addValue("idTest1", tes2.getIdTest1());
-    params.addValue("name", tes2.getName());
+    params.addValue("name", test1.getName());
     KeyHolder keyHolder = new GeneratedKeyHolder();
 
-    NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplateSatu);
+    NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(jdbcTemplateDua);
     namedParameterJdbcTemplate.update(sql, params, keyHolder);
 
     Number generatedId = keyHolder.getKey();
 
-    tes2.setId(generatedId.intValue());
-    return tes2;
+    test1.setId(generatedId.intValue());
+    return test1;
   }
 }

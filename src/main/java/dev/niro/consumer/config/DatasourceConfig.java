@@ -1,16 +1,22 @@
 package dev.niro.consumer.config;
 
-import com.zaxxer.hikari.HikariDataSource;
+import javax.sql.DataSource;
+
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.data.transaction.ChainedTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.sql.DataSource;
+import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 public class DatasourceConfig {
   @Bean
+  @Primary
   @ConfigurationProperties("spring.datasource.db1")
   public DataSourceProperties dbSatu() {
     return new DataSourceProperties();
@@ -41,7 +47,23 @@ public class DatasourceConfig {
     dataSource.setUsername(dbDua().getUsername());
     dataSource.setPassword(dbDua().getPassword());
     dataSource.setDriverClassName(dbDua().getDriverClassName());
-    dataSource.setAutoCommit(false);
+//    dataSource.setAutoCommit(false);
     return dataSource;
   }
+
+  @Bean(name = "transactionManager1")
+  public PlatformTransactionManager transactionManager1() {
+    return new DataSourceTransactionManager(dataSource1());
+  }
+
+  @Bean(name = "transactionManager2")
+  public PlatformTransactionManager transactionManager2() {
+    return new DataSourceTransactionManager(dataSource2());
+  }
+
+  @Bean
+    public PlatformTransactionManager chainedTransactionManager(PlatformTransactionManager transactionManager1,
+                                                                PlatformTransactionManager transactionManager2) {
+        return new ChainedTransactionManager(transactionManager1, transactionManager2);
+    }
 }
